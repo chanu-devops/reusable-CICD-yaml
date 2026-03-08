@@ -15,11 +15,11 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-        if: ${{ inputs.app-type  == 'java' }}
       - name: Run to build file
-        run: mvn clean package
         if: ${{ inputs.app-type  == 'java' }}
+        run: mvn clean package
       - name: Upload Artifact
+        if: ${{ inputs.app-type  == 'java' }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.micro-services }}-jar
@@ -48,8 +48,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Docker Login for pushing image
         run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 444206648334.dkr.ecr.us-east-1.amazonaws.com
-        if: ${{ inputs.app-type  == 'java' }}
       - name: Download Artifact
+        if: ${{ inputs.app-type  == 'java' }}
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.micro-services }}-jar
