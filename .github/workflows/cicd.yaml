@@ -11,18 +11,47 @@ on:
         type: string
 
 jobs:
-  test:
+  build:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
+        if: ${{ input.app-type  == 'java' }}
+      - name: Run to build file
+        run: mvn clean package
+        if: ${{ input.app-type  == 'java' }}
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.micro-services }}-jar
+          path: target/${{ inputs.micro-services }}-1.0.jar
+          retention-days: 1
+
+  test:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+        if: ${{ input.app-type  == 'nodejs' }}
       - name: Run a One line test
         run: echo npm test
+        if: ${{ input.app-type  == 'java' }}
+      - name: Run a One line test
+        run: echo mvn test
+        if: ${{ input.app-type  == 'python' }}
+      - name: Run a One line test
+        run: echo pytest test.py
 
   docker:
     needs: test
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
+        if: ${{ input.app-type  == 'java' }}
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.micro-services }}-jar
+          path: ./
       - name: Docker Login for pushing image
         run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 444206648334.dkr.ecr.us-east-1.amazonaws.com
       - name: Docker Build
