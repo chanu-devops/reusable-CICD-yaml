@@ -15,10 +15,10 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-        if: ${{ input.app-type  == 'java' }}
+        if: ${{ inputs.app-type  == 'java' }}
       - name: Run to build file
         run: mvn clean package
-        if: ${{ input.app-type  == 'java' }}
+        if: ${{ inputs.app-type  == 'java' }}
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -31,13 +31,13 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-        if: ${{ input.app-type  == 'nodejs' }}
+        if: ${{ inputs.app-type  == 'nodejs' }}
       - name: Run a One line test
         run: echo npm test
-        if: ${{ input.app-type  == 'java' }}
+        if: ${{ inputs.app-type  == 'java' }}
       - name: Run a One line test
         run: echo mvn test
-        if: ${{ input.app-type  == 'python' }}
+        if: ${{ inputs.app-type  == 'python' }}
       - name: Run a One line test
         run: echo pytest test.py
 
@@ -46,7 +46,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-        if: ${{ input.app-type  == 'java' }}
+        if: ${{ inputs.app-type  == 'java' }}
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
