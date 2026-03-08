@@ -54,7 +54,7 @@ jobs:
       - name: Get kubectl config
         run: aws eks update-kubeconfig --name dev
       - name: Helm deploy app
-        run: helm upgrade -i catalogue . -f microservice-specific-valuesFiles/${{ inputs.micro-services }}.yml
+        run: echo helm upgrade -i catalogue . -f microservice-specific-valuesFiles/${{ inputs.micro-services }}.yml
 
   uat-deploy:
     needs: qa-deploy
@@ -67,7 +67,7 @@ jobs:
       - name: Get kubectl config
         run: aws eks update-kubeconfig --name dev
       - name: Helm deploy app
-        run: helm upgrade -i catalogue . -f microservice-specific-valuesFiles/${{ inputs.micro-services }}.yml
+        run: echo helm upgrade -i catalogue . -f microservice-specific-valuesFiles/${{ inputs.micro-services }}.yml
 
   prod-deploy:
     needs: uat-deploy
@@ -80,5 +80,5 @@ jobs:
       - name: Get kubectl config
         run: aws eks update-kubeconfig --name dev
       - name: Helm deploy app
-        run: helm upgrade -i catalogue . -f microservice-specific-valuesFiles/${{ inputs.micro-services }}.yml
+        run: echo helm upgrade -i catalogue . -f microservice-specific-valuesFiles/${{ inputs.micro-services }}.yml
 
