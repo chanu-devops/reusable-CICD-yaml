@@ -18,8 +18,8 @@ jobs:
         if: ${{ inputs.app-type  == 'java' }}
       - name: Run to build file
         run: mvn clean package
-        if: ${{ inputs.app-type  == 'java' }}
       - name: Upload Artifact
+        if: ${{ inputs.app-type  == 'java' }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.micro-services }}-jar
@@ -46,8 +46,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-        if: ${{ inputs.app-type  == 'java' }}
       - name: Download Artifact
+        if: ${{ inputs.app-type  == 'java' }}
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.micro-services }}-jar
