@@ -31,14 +31,14 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
+      - name: Run a One line test
         if: ${{ inputs.app-type  == 'nodejs' }}
-      - name: Run a One line test
         run: echo npm test
+      - name: Run a One line test
         if: ${{ inputs.app-type  == 'java' }}
-      - name: Run a One line test
         run: echo mvn test
-        if: ${{ inputs.app-type  == 'python' }}
       - name: Run a One line test
+        if: ${{ inputs.app-type  == 'python' }}
         run: echo pytest test.py
 
   docker:
