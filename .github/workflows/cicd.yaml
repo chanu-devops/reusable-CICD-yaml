@@ -10,6 +10,7 @@ on:
         required: true
         type: string
 
+
 jobs:
   build:
     runs-on: self-hosted
@@ -71,6 +72,17 @@ jobs:
         run: aws eks update-kubeconfig --name dev
       - name: Helm deploy app
         run: helm upgrade -i ${{ inputs.micro-services }} . -f microservice-specific-valuesFiles/${{ inputs.micro-services }}.yml
+      - name: ArgoCd Login
+        run: |
+          url=${kubectl get svc argocd-server -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'}
+          password=${kubectl get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 --decode}
+          argocd login $url --username admin --password $password --insecure
+      - name: Create App in ArgoCd
+        run: argocd app create ${{ inputs.micro-services }} --repo https://github.com/ckolli66/roboshop-helm-v1.git --path . --dest-namespace default --dest-server https://kubernetes.default.svc --values microservice-specific-valuesFiles/${{ inputs.micro-services }}.yml
+      - name: Sync App
+        run: argocd app sync ${{ inputs.micro-services }}
+      - name: ArgoCd App Health Check
+        run: argocd app wait ${{ inputs.micro-services }}
 
   qa-deploy:
     needs: dev-deploy
