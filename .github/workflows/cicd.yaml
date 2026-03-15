@@ -82,7 +82,7 @@ jobs:
       - name: Sync App
         run: argocd app sync ${{ inputs.micro-services }}
       - name: ArgoCd App Health Check
-        run: argocd app wait ${{ inputs.micro-services }}
+        run: argocd app wait ${{ inputs.micro-services }} --timeout 60
 
   qa-deploy:
     needs: dev-deploy
